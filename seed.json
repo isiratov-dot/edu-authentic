@@ -1,0 +1,98 @@
+[
+ {
+  "num": "DIP-2013-4808",
+  "type": "diplome",
+  "nom": "Mohamed Lamine Dellahi",
+  "naiss": "1979-12-31",
+  "lieu": "Tavragh Zeina – Nouakchott (Mauritanie)",
+  "titre": "Licence en Sciences économiques et de gestion",
+  "etab": "École Supérieure de Commerce de Dakar (SUPDECO Dakar)",
+  "date": "2013-04-17",
+  "duree": "3 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "FOR-2013-1767",
+  "type": "formation",
+  "nom": "Mohamed Lamine Dellahi",
+  "naiss": "1979-12-31",
+  "lieu": "Tavragh Zeina – Nouakchott (Mauritanie)",
+  "titre": "Licence en Sciences économiques et de gestion",
+  "etab": "École Supérieure de Commerce de Dakar (SUPDECO Dakar)",
+  "date": "2013-04-17",
+  "duree": "3 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "DIP-2025-8472",
+  "type": "diplome",
+  "nom": "BEIBAKAR ELY",
+  "naiss": "1998-09-22",
+  "lieu": "Arafat (Mauritanie)",
+  "titre": "Master Professionnel en Système d'Information Bancaire.",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2025-07-25",
+  "duree": "4 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "FOR-2025-9912",
+  "type": "formation",
+  "nom": "BEIBAKAR ELY",
+  "naiss": "1998-09-22",
+  "lieu": "Arafat (Mauritanie)",
+  "titre": "Master 2 Professionnel en Système d'Information Bancaire.",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2025-07-25",
+  "duree": "2 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "FOR-2026-9847",
+  "type": "formation",
+  "nom": "BEIBAKAR ELY",
+  "naiss": "1998-09-22",
+  "lieu": "Arafat (Mauritanie)",
+  "titre": "Master 1 Professionnel en Système d'Information Bancaire.",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2026-07-13",
+  "duree": "2 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "DIP-2026-5109",
+  "type": "diplome",
+  "nom": "SASSE GUIG",
+  "naiss": "1994-06-26",
+  "lieu": "Néma (Mauritanie)",
+  "titre": "Master Professionnel en Finances et Gestion Publiques",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2026-07-13",
+  "duree": "3 ans",
+  "statut": "valide"
+ },
+ {
+  "num": "FOR-2026-2075",
+  "type": "formation",
+  "nom": "SASSE GUIG",
+  "naiss": "1994-06-26",
+  "lieu": "Néma (Mauritanie)",
+  "titre": "Master 2 Professionnel en Finances et Gestion Publiques.",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2026-07-13",
+  "duree": "2024-2025",
+  "statut": "valide"
+ },
+ {
+  "num": "FOR-2026-5089",
+  "type": "formation",
+  "nom": "SASSE GUIG",
+  "naiss": "1994-06-26",
+  "lieu": "Néma (Mauritanie)",
+  "titre": "Master 1 Professionnel en Finances et Gestion Publiques.",
+  "etab": "Institut Supérieur de Finance (ISF)",
+  "date": "2026-07-13",
+  "duree": "2023-2024",
+  "statut": "valide"
+ }
+]

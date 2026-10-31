@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VérifDiplôme – Authentification des diplômes et formations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#eef2f3;--surface:#fff;--ink:#14282b;--muted:#566a6d;--line:#cfdadc;--brand:#0e4a4f;--brand-ink:#fff;
+  --ok:#1a6b3c;--ok-bg:#e3f3ea;--bad:#a12b2b;--bad-bg:#f8e6e6;--warn:#8a5a00;--warn-bg:#fbefd5;
+  --serif:'Spectral',Georgia,'Times New Roman',serif;--sans:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1b1d;--surface:#16282b;--ink:#e6eeef;--muted:#9bb0b3;--line:#2b4144;--brand:#5cc1c7;--brand-ink:#08262a;--ok:#6fd49a;--ok-bg:#15382a;--bad:#f09a9a;--bad-bg:#3b1c1c;--warn:#f0c470;--warn-bg:#3a2d10}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1b1d;--surface:#16282b;--ink:#e6eeef;--muted:#9bb0b3;--line:#2b4144;--brand:#5cc1c7;--brand-ink:#08262a;--ok:#6fd49a;--ok-bg:#15382a;--bad:#f09a9a;--bad-bg:#3b1c1c;--warn:#f0c470;--warn-bg:#3a2d10}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans)}
+.wrap{max-width:980px;margin:0 auto;padding:0 1.25rem}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0;gap:1rem;flex-wrap:wrap}
+.logo{font:700 1.25rem var(--serif);color:var(--brand);display:flex;align-items:center;gap:.55rem}
+.logo svg{width:28px;height:28px}
+nav a{color:var(--muted);text-decoration:none;margin-left:1.1rem;font-size:.93rem}
+nav a:hover{color:var(--ink);text-decoration:underline}
+nav a.adm{border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;padding:2.2rem 0 3rem}
+h1{font:700 clamp(2rem,5vw,3.1rem)/1.12 var(--serif);margin:0 0 1rem;letter-spacing:-.01em}
+.lead{color:var(--muted);max-width:46ch;margin:0 0 1rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.4rem}
+.tabs{display:flex;gap:.4rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:.55rem .8rem;font:600 .95rem var(--sans);color:var(--muted);cursor:pointer;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--brand)}
+label{display:block;font-weight:600;font-size:.9rem;margin:.8rem 0 .3rem}
+input,select{width:100%;padding:.7rem .8rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.hint{font-size:.82rem;color:var(--muted);margin:.35rem 0 0}
+.btn{margin-top:1.1rem;padding:.75rem 1.1rem;border:0;border-radius:6px;background:var(--brand);color:var(--brand-ink);font:600 1rem var(--sans);cursor:pointer}
+.btn.full{width:100%}.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn.sm{margin:0;padding:.3rem .65rem;font-size:.82rem}
+.btn:hover{filter:brightness(1.08)}
+#result{margin-top:1.1rem}
+.res{display:grid;grid-template-columns:auto 1fr;gap:1rem;padding:1rem;border-radius:8px;border:1px solid currentColor;animation:pop .35s ease-out}
+.res.ok{background:var(--ok-bg);color:var(--ok)}.res.bad{background:var(--bad-bg);color:var(--bad)}.res.warn{background:var(--warn-bg);color:var(--warn)}
+.res .body{color:var(--ink)}.res h3{margin:0 0 .3rem;font:700 1.1rem var(--serif);color:inherit}
+.seal{width:64px;height:64px;border-radius:50%;border:3px double currentColor;display:grid;place-items:center;transform:rotate(-8deg)}
+.seal svg{width:30px;height:30px}
+dl{margin:.5rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.2rem .9rem;font-size:.92rem}
+dt{color:var(--muted)}dd{margin:0;font-weight:500}
+@keyframes pop{from{transform:scale(.97);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.res{animation:none}html{scroll-behavior:auto}}
+section{padding:2.4rem 0;border-top:1px solid var(--line)}
+h2{font:700 1.6rem var(--serif);margin:0 0 1.2rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-weight:600;margin-bottom:.6rem}
+.steps strong{display:block;margin-bottom:.2rem}.steps span,.cols p{color:var(--muted);font-size:.94rem}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}.cols p{margin:.3rem 0 0}
+details{border-bottom:1px solid var(--line);padding:.8rem 0}
+summary{cursor:pointer;font-weight:600}details p{color:var(--muted);margin:.5rem 0 0}
+.demo{display:none;font-size:.9rem;color:var(--muted);margin:1rem 0 0}
+.demo button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:.25rem .7rem;margin:.2rem .3rem .2rem 0;font:500 .85rem var(--sans);cursor:pointer}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+.tw{overflow-x:auto;margin-top:1.2rem}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:640px}
+th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:middle}
+.badge{display:inline-block;padding:.1rem .55rem;border-radius:999px;font-size:.78rem;font-weight:600}
+.badge.valide{background:var(--ok-bg);color:var(--ok)}.badge.revoque{background:var(--bad-bg);color:var(--bad)}
+.rowact{display:flex;gap:.4rem;flex-wrap:wrap}
+dialog{border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);max-width:340px;text-align:center}
+dialog canvas,dialog img{max-width:100%}
+.note{padding:1rem;border:1px dashed var(--line);border-radius:8px;color:var(--muted)}
+footer{padding:1.8rem 0 2.5rem;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line)}
+@media (max-width:760px){.hero,.steps,.cols,.grid2{grid-template-columns:1fr}nav a:not(.adm){display:none}.hero{padding-top:1rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M16 3l11 4v8c0 7-5 12-11 14C10 27 5 22 5 15V7z"/><path d="M11 16l4 4 7-8"/></svg>VérifDiplôme</div>
+  <nav><a href="#verifier">Vérifier</a><a href="#comment">Comment ça marche</a><a href="#faq">Questions fréquentes</a><a href="#contact">Contact</a><a class="adm" href="/admin.html">Espace établissement</a></nav>
+</header>
+<main>
+<div class="hero" id="verifier">
+  <div>
+    <h1>Vérifiez l’authenticité d’un diplôme ou d’une attestation de formation</h1>
+    <p class="lead">Saisissez le numéro inscrit sur le document. Le registre officiel confirme en quelques secondes si le titre est valide, à qui il appartient et quel établissement l’a délivré.</p>
+      </div>
+  <div class="panel">
+    <div class="tabs" role="tablist" aria-label="Type de document">
+      <button class="tab" role="tab" id="t-dip" aria-selected="true" data-type="diplome">Diplôme</button>
+      <button class="tab" role="tab" id="t-for" aria-selected="false" data-type="formation">Attestation de formation</button>
+    </div>
+    <form id="f" novalidate>
+      
+      
+      
+      <label for="num">Numéro du document</label>
+      <input id="num" autocomplete="off" placeholder="Ex. DIP-2022-0481" required>
+      <p class="hint" id="hint">Le numéro figure en bas du diplôme, près du QR code.</p>
+      <label for="nom">Nom du titulaire</label>
+      <input id="nom" autocomplete="off" placeholder="Prénom Nom">
+      <label for="naiss">Date de naissance du titulaire</label>
+      <input id="naiss" type="date">
+      <button class="btn full" type="submit">Vérifier le document</button>
+    </form>
+    <div id="result" aria-live="polite"></div>
+    <p class="demo" id="demo">Essayez avec un exemple :
+      <button type="button" data-n="DIP-2022-0481" data-m="Awa Diop">valide</button>
+      <button type="button" data-n="DIP-2019-0123" data-m="Moussa Ndiaye">révoqué</button>
+      <button type="button" data-n="FOR-2024-0090" data-m="Fatou Sow">formation</button>
+      <button type="button" data-n="DIP-2021-9999" data-m="Jean Test">inconnu</button>
+    </p>
+  </div>
+</div>
+
+<section id="comment">
+  <h2>Comment ça marche</h2>
+  <ol class="steps">
+    <li><strong>Repérez le numéro</strong><span>Chaque diplôme et attestation délivrés porte un numéro unique et un QR code.</span></li>
+    <li><strong>Saisissez les informations</strong><span>Indiquez le numéro, le nom et la date de naissance du titulaire : tous trois doivent correspondre au registre.</span></li>
+    <li><strong>Lisez le résultat</strong><span>Valide, révoqué ou introuvable : le statut s’affiche avec l’établissement émetteur.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>À qui s’adresse le service</h2>
+  <div class="cols">
+    <div><strong>Employeurs et recruteurs</strong><p>Contrôlez un titre avant une embauche, sans courrier ni appel à l’établissement.</p></div>
+    <div><strong>Établissements</strong><p>Inscrivez vos diplômés et stagiaires, imprimez les QR codes et révoquez un titre en cas d’erreur ou de fraude.</p></div>
+    <div><strong>Titulaires</strong><p>Prouvez la validité de votre diplôme à tout moment, en partageant simplement son numéro.</p></div>
+  </div>
+</section>
+
+<section id="faq">
+  <h2>Questions fréquentes</h2>
+  <details><summary>Que signifie « document révoqué » ?</summary><p>L’établissement émetteur a annulé le titre, par exemple après une erreur ou une fraude. Le document n’a plus de valeur.</p></details>
+  <details><summary>Les informations ne correspondent pas. Que faire ?</summary><p>Vérifiez l’orthographe du nom et la date de naissance. Si tout est exact, le document a peut-être été falsifié : contactez l’établissement émetteur.</p></details>
+  <details><summary>Mon établissement n’apparaît pas dans le registre.</summary><p>Il doit d’abord inscrire ses documents via l’espace établissement. Utilisez le formulaire de contact ci-dessous pour demander une inscription.</p></details>
+  <details><summary>Mes données sont-elles protégées ?</summary><p>La vérification exige à la fois le nom exact et la date de naissance du titulaire. Le registre n’est pas consultable en liste par le public.</p></details>
+</section>
+
+<section id="contact">
+  <h2>Contact et signalement</h2>
+  <p class="lead">Une question, une demande d’inscription ou un document suspect à signaler : écrivez à <strong><a href="mailto:contact@edu-authentic.online">contact@edu-authentic.online</a></strong> en indiquant le numéro concerné.</p>
+</section>
+</main>
+<footer>© VérifDiplôme. Seuls les établissements autorisés peuvent inscrire ou révoquer un document.</footer>
+</div>
+
+
+<script>
+const $=id=>document.getElementById(id);
+const norm=s=>(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();
+const fmt=d=>new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const DEMO=[
+ {num:"DIP-2022-0481",type:"diplome",nom:"Awa Diop",titre:"Licence en gestion des entreprises",etab:"Université Iba Der Thiam de Thiès",date:"2022-07-15",statut:"valide"},
+ {num:"DIP-2019-0123",type:"diplome",nom:"Moussa Ndiaye",titre:"Master en informatique",etab:"École Supérieure Polytechnique",date:"2019-10-02",statut:"revoque",motif:"Document annulé par l’établissement émetteur."},
+ {num:"FOR-2024-0090",type:"formation",nom:"Fatou Sow",titre:"Soudure et chaudronnerie – niveau 2",etab:"Centre de formation professionnelle de Thiès",date:"2024-03-28",statut:"valide",duree:"320 heures"}];
+let db=null,user=null,type="diplome",live=false,all=[];
+const icon={ok:'<path d="M7 17l6 6 12-14"/>',bad:'<path d="M8 8l16 16M24 8L8 24"/>',warn:'<path d="M16 8v10M16 23v1"/>'};
+function show(c,t,h){$("result").innerHTML=`<div class="res ${c}"><div class="seal"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">${icon[c]}</svg></div><div class="body"><h3>${t}</h3>${h}</div></div>`}
+function setType(t){type=t;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x.dataset.type===t));$("num").placeholder=t==="diplome"?"Ex. DIP-2022-0481":"Ex. FOR-2024-0090";$("hint").textContent=t==="diplome"?"Le numéro figure en bas du diplôme, près du QR code.":"Le numéro figure sur l’attestation, sous la signature du centre.";
+ 
+ $("result").innerHTML=""}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setType(b.dataset.type)));
+document.querySelectorAll(".demo button").forEach(b=>b.addEventListener("click",()=>{setType(b.dataset.n.startsWith("FOR")?"formation":"diplome");$("num").value=b.dataset.n;$("nom").value=b.dataset.m;$("f").requestSubmit()}));
+$("f").addEventListener("submit",async e=>{
+ e.preventDefault();const n=$("num").value.trim().toUpperCase(),nom=$("nom").value,naiss=$("naiss").value;
+ if(!n||!nom.trim()||!naiss){show("warn","Informations manquantes","<p>Renseignez le numéro du document, le nom et la date de naissance du titulaire.</p>");return}
+ let res;
+ try{const p=await fetch("/.netlify/functions/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,num:n,nom,naiss})});res=await p.json()}
+ catch(err){show("warn","Service indisponible","<p>La vérification est momentanément impossible. Réessayez dans un instant.</p>");return}
+ if(res.status==="notfound"){show("bad","Document introuvable",`<p>Aucun ${type==="diplome"?"diplôme":"attestation"} ne correspond au numéro <b>${esc(n)}</b>. Vérifiez la saisie ou contactez l’établissement émetteur.</p>`);return}
+ if(res.status==="mismatch"){show("bad","Informations non concordantes","<p>Le numéro existe, mais le nom ou la date de naissance saisis ne correspondent pas au titulaire enregistré. Ce document peut avoir été falsifié.</p>");return}
+ if(res.status!=="ok"){show("warn","Erreur","<p>Une erreur est survenue. Réessayez.</p>");return}
+ const r=res.record;
+ const rows=`<dl><dt>Numéro</dt><dd>${esc(r.num)}</dd><dt>Titulaire</dt><dd>${esc(r.nom)}</dd><dt>${type==="diplome"?"Diplôme":"Formation"}</dt><dd>${esc(r.titre)}</dd><dt>Délivré par</dt><dd>${esc(r.etab)}</dd><dt>Date</dt><dd>${fmt(r.date)}</dd>${r.duree?`<dt>Durée</dt><dd>${esc(r.duree)}</dd>`:""}</dl>`;
+ r.statut==="revoque"?show("bad","Document révoqué",`<p>${esc(r.motif||"Ce document a été annulé par l’établissement.")}</p>${rows}`):show("ok","Document authentique",rows)});
+</script>
+</body>
+</html>
